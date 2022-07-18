@@ -1,39 +1,11 @@
 const gameBoard = (() => {
-    const marks = ['empty','empty','empty','empty','empty','empty','empty','empty','empty']
-    return {
-        marks: marks
-    };
-})();
-
-const createPlayer = (playerName, playerMark) => {
-    const mark = playerMark;
-    const name = playerName;
-    
-    return { 
-        name,
-        mark,
-    }
-};
-
-const gameFlow = (()=> {
-    const addMark = (player, position) => {
-        if (gameBoard.marks[position] == 'empty') {
-        gameBoard.marks.splice(position, 1, `${player.mark}`)
-    } else {console.log('Place is taken')};
-    displayController.updateBoard();
-}
-    return {
-        addMark
-    }
-})();
-
-const displayController = (() => {
+    const marks = ['','','','','','','','',''];
     const newBoard = () => {
         for (let i = 0; i < 9; i++) {
             const boardContainer = document.querySelector('#boardContainer')
             const divs = document.createElement('div');
             divs.classList.add('box')
-            divs.setAttribute('id', `box${[i+1]}`)
+            divs.setAttribute('id', `${[i]}`)
             boardContainer.appendChild(divs)
         }
     }; 
@@ -44,14 +16,49 @@ const displayController = (() => {
         }
     }
     return {
+        marks: marks,
         newBoard,
         updateBoard
     };
+    
+})();
+
+const createPlayer = (name, marker) => {
+    return { 
+        name,
+        marker,
+    }
+};
+
+const gameFlow = (()=> {
+    const addMark = (currentPlayer, position) => {
+        const boxes = document.querySelectorAll('.box');
+        boxes.forEach((box) => {
+            box.addEventListener('click', () => {
+                const position = box.id;
+                if (gameBoard.marks[position] == '') {
+                gameBoard.marks.splice(position, 1, `${currentPlayer.marker}`);
+                gameBoard.updateBoard();
+            } else {console.log('Place is taken')};
+            })
+        })
+    }
+    const startGame = () => {
+        const startButton = document.querySelector('#startButton');
+        startButton.forEach((button) => {
+            button.addEventListener('click', () => {
+
+            })
+        })
+    }
+    return {
+        addMark
+    }
 })();
 
 const jerzy = createPlayer('Jerzy', 'x')
-displayController.newBoard();
-gameFlow.addMark(jerzy, 1)
+gameBoard.newBoard();
 const tomek = createPlayer('Tomek', 'o')
-gameFlow.addMark(tomek, 8)
+gameBoard.updateBoard();
 console.log(gameBoard.marks) 
+gameFlow.addMark(tomek);
