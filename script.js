@@ -1,8 +1,15 @@
 // gameboard object
 const gameBoard = (() => {
-    const marks = ['','','','','','','','',''];
+    let marks = ['','','','','','','','',''];
     const winningMarks = [
-        [0,1,2]
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6]
     ]
     const newBoard = () => {
         for (let i = 0; i < 9; i++) {
@@ -43,47 +50,52 @@ const player = (() => {
 
 // game object
 const game = (()=> {
-    const tomek = player.createPlayer('Tomek', 'o');
-    const jerzy = player.createPlayer('Jerzy', 'x');
-    let currentPlayer = tomek;
-    function checkWinner() {
+    const playerOne = player.createPlayer('Player One', 'x');
+    const playerTwo = player.createPlayer('Player Two', 'o');
+    const infoDisplay = document.querySelector('#currentPlayer')
+    let currentPlayer = playerOne;
+    let hasEnded = false;
+    
+    const switchPlayer = () => {
+        if (currentPlayer === playerOne) {
+            currentPlayer = playerTwo;
+            infoDisplay.innerText = `It's ${currentPlayer.name} turn`;
+        } else {
+            currentPlayer = playerOne;
+            infoDisplay.innerText = `It's ${currentPlayer.name} turn`;
+        }
+    }
+
+    const checkWinner = () => {
         gameBoard.winningMarks.forEach((item, index) => {
             if (gameBoard.marks[item[0]] === currentPlayer.marker && gameBoard.marks[item[1]] === currentPlayer.marker && gameBoard.marks[item[2]] === currentPlayer.marker) {
-                console.log('winner!')
+                infoDisplay.innerText = `${currentPlayer.name} is a winner!`;
+                infoDisplay.classList.add('winnerText')
+                hasEnded = true;
             }
         })
     }
-    // function nextPlayer() {
-    //     currentPlayer === tomek ? currentPlayer = jerzy : currentPlayer = tomek;
-    //     console.log('nextPlayer() function ran')
-    //     console.log('active player: ' + currentPlayer.name);
-    // }
-    const addMark = (currentPlayer, position) => {
+
+    const addMark = () => {
         const boxes = document.querySelectorAll('.box');
+        infoDisplay.innerText = `It's ${currentPlayer.name} turn`;
         boxes.forEach((box) => {
             box.addEventListener('click', () => {
                 const position = box.id;
                 if (gameBoard.marks[position] == '') {
                     gameBoard.marks.splice(position, 1, `${currentPlayer.marker}`);
                     gameBoard.updateBoard();
-                    console.log(currentPlayer.marker)
-                    console.log(gameBoard.marks) 
                     checkWinner();
-                    if (currentPlayer === tomek) {
-                        currentPlayer = jerzy
-                    } else {
-                        currentPlayer = tomek
+                    if (hasEnded === false) {
+                    switchPlayer();
                     }
-                } else {console.log('Place is taken')};
+                    } else {console.log('Place is taken')};
+                })
             })
-        })
-    }
-  
+        }
     return {
         addMark,
         currentPlayer,
-        checkWinner,
-        // nextPlayer
     }
 })();
 
