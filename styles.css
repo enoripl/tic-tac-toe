@@ -28,8 +28,8 @@ font-family: 'Silkscreen', cursive;
 }
 
 #currentPlayer {
-    font-size: 1.2em;
-    padding-bottom: 30px;
+    font-size: 1.3em;
+    margin-bottom: 25px;
 }
 
 .winnerText {

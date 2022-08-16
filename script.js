@@ -70,7 +70,7 @@ const game = (()=> {
         gameBoard.winningMarks.forEach((item, index) => {
             if (gameBoard.marks[item[0]] === currentPlayer.marker && gameBoard.marks[item[1]] === currentPlayer.marker && gameBoard.marks[item[2]] === currentPlayer.marker) {
                 infoDisplay.innerText = `${currentPlayer.name} is a winner!`;
-                infoDisplay.classList.add('winnerText')
+                infoDisplay.classList.add('winnerText', 'animate__animated', 'animate__pulse')
                 hasEnded = true;
             }
         })
